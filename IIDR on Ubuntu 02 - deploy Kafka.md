@@ -5,6 +5,7 @@ https://docs.confluent.io/4.1.1/installation/installing_cp/deb-ubuntu.html
 iidr@iidr-virtual-machine:~/Desktop$ wget -qO - https://packages.confluent.io/deb/4.1/archive.key | sudo apt-key add -
 
 [sudo] password for iidr: 
+
 ```OK```
 
 iidr@iidr-virtual-machine:~/Desktop$ sudo add-apt-repository "deb [arch=amd64] https://packages.confluent.io/deb/4.1 stable main"
@@ -51,6 +52,7 @@ root@iidr-virtual-machine:/var/lib/zookeeper# vi myid
 root@iidr-virtual-machine:/var/lib/zookeeper# cat myid 
 
 root@iidr-virtual-machine:/var/lib/zookeeper# ls
+
 ```myid```
 
 root@iidr-virtual-machine:/var/lib/zookeeper# echo "1" > myid
@@ -87,6 +89,7 @@ _schemas
 ```
 
 root@iidr-virtual-machine:/usr/bin# kafka-topics --zookeeper iidr-virtual-machine:2181 --create --topic KafkaTopicTest --replication-factor 1 --partitions 1
+
 ```Created topic "KafkaTopicTest".```
 
 
