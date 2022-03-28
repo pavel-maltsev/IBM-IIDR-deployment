@@ -148,7 +148,7 @@ root@iidr-virtual-machine:/opt/ibm/db2/V11.5# su - db2inst1
 Manually start DB2
 
 db2inst1@iidr-virtual-machine:~$ db2start
-SQL1063N  DB2START processing was successful.
+```SQL1063N  DB2START processing was successful.```
 
 Make sure db2 has started up and listener is on port 25000
 ```
