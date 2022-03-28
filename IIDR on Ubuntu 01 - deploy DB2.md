@@ -168,7 +168,7 @@ LISTEN              0                   5                                       
 ## Create database with name Source and Schema mydata
 db2inst1@iidr-virtual-machine:~$ db2 create database Source pagesize 32 k
 
-DB20000I  The CREATE DATABASE command completed successfully.
+```DB20000I  The CREATE DATABASE command completed successfully.```
 
 db2inst1@iidr-virtual-machine:~$ db2 connect to source
 ```
