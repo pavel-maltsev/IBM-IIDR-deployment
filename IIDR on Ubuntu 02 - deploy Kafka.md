@@ -51,11 +51,17 @@ root@iidr-virtual-machine:/var/lib/zookeeper# vi myid
 
 root@iidr-virtual-machine:/var/lib/zookeeper# cat myid 
 
+null
+
 root@iidr-virtual-machine:/var/lib/zookeeper# ls
 
 ```myid```
 
 root@iidr-virtual-machine:/var/lib/zookeeper# echo "1" > myid
+
+root@iidr-virtual-machine:/var/lib/zookeeper# cat myid 
+
+```1```
 
 root@iidr-virtual-machine:/var/lib/kafka# cd /etc/kafka/
 
