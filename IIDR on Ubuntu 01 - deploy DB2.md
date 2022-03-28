@@ -1,6 +1,6 @@
-#Prep-work
+# Prep-work
 
-##Prepare root user after the system install
+## Prepare root user after the system install
 
 iidr@iidr-virtual-machine:~/Desktop$ sudo passwd root
 [sudo] password for iidr: 
@@ -9,7 +9,7 @@ Retype new password:
 passwd: password updated successfully
 
 
-##Download DB2 distributive to be installed
+## Download DB2 distributive to be installed
 
 open Firefox
 google search for "ibm fix central"
@@ -21,7 +21,7 @@ Continue
 provide IBM ID credentials
 download using HTTP
 
-##install DB2 pre-requisites
+## Install DB2 pre-requisites
 iidr@iidr-virtual-machine:~/Desktop$ dpkg -l | grep pam
 
 User root account for deployment of packages
@@ -41,7 +41,7 @@ ii  libstdc++6:amd64                           10.3.0-1ubuntu1~20.04            
 
 root@iidr-virtual-machine:~# apt install binutils
 
-#Unpack and install DB2
+# Unpack and install DB2
 root@iidr-virtual-machine:~# cd /home/iidr/Downloads/
 root@iidr-virtual-machine:/home/iidr/Downloads# ls
 v11.5.7_linuxx64_universal_fixpack.tar.gz
@@ -56,7 +56,7 @@ type SERVER when asked what to install
 pureScale - answer no
 wait till "The execution completed successfully"
 
-#Use information from thi link to post-configure DB2
+# Use information from this link to post-configure DB2
 https://github.com/zinal/Db2-Russian/blob/master/docs/Db2ManualInstance.md
 
 root@iidr-virtual-machine:/home/iidr/Downloads/universal# groupadd db2iadm1
@@ -114,7 +114,7 @@ LISTEN              0                   128                                     
 LISTEN              0                   5                                          [::1]:631                                       [::]:*   
 ```
 
-##Create database with name Source and Schema mydata
+## Create database with name Source and Schema mydata
 db2inst1@iidr-virtual-machine:~$ db2 create database Source pagesize 32 k
 DB20000I  The CREATE DATABASE command completed successfully.
 db2inst1@iidr-virtual-machine:~$ db2 connect to source
@@ -128,7 +128,7 @@ db2inst1@iidr-virtual-machine:~$ db2 connect to source
 db2inst1@iidr-virtual-machine:~$ db2 create schema mydata
 DB20000I  The SQL command completed successfully.
 
-##Turn on Archive logs for DB2
+## Turn on Archive logs for DB2
 
 db2inst1@iidr-virtual-machine:~$ pwd
 /home/db2inst1
@@ -143,5 +143,5 @@ DB20000I  The UPDATE DATABASE CONFIGURATION command completed successfully.
 db2inst1@iidr-virtual-machine:~/archlog$ db2 backup db source
 Backup successful. The timestamp for this backup image is : 20220323170618
 
-##Configure DB2 for autostart
+## Configure DB2 for autostart
 db2inst1@iidr-virtual-machine:~/archlog$ db2iauto -on db2inst1
