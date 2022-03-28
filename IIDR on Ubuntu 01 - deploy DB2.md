@@ -50,13 +50,15 @@ root@iidr-virtual-machine:~# apt install ksh
 
 root@iidr-virtual-machine:~# dpkg -l | grep aio
 
-```ii  libsane-hpaio:amd64                        3.20.3+dfsg0-2                      amd64        HP SANE backend for multi-function peripherals
+```
+ii  libsane-hpaio:amd64                        3.20.3+dfsg0-2                      amd64        HP SANE backend for multi-function peripherals
 ```
 root@iidr-virtual-machine:~# apt install libaio1
 
 root@iidr-virtual-machine:~# dpkg -l | grep libstd
 
-```ii  libstdc++6:amd64                           10.3.0-1ubuntu1~20.04               amd64        GNU Standard C++ Library v3
+```
+ii  libstdc++6:amd64                           10.3.0-1ubuntu1~20.04               amd64        GNU Standard C++ Library v3
 ```
 root@iidr-virtual-machine:~# apt install binutils
 
