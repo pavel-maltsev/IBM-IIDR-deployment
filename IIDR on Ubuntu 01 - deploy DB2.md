@@ -3,22 +3,32 @@
 ## Prepare root user after the system install
 
 iidr@iidr-virtual-machine:~/Desktop$ sudo passwd root
+
 [sudo] password for iidr: 
+
 New password: 
+
 Retype new password: 
+
 passwd: password updated successfully
 
 
 ## Download DB2 distributive to be installed
 
 open Firefox
+
 google search for "ibm fix central"
+
 https://www.ibm.com/support/fixcentral/
+
 search for db2
 
 Search for latest version with UNIVERSAL in the name. In this case it is DB2-linuxx64-universal_fixpack-11.5.7.0-FP000 
+
 Continue
+
 provide IBM ID credentials
+
 download using HTTP
 
 ## Install DB2 pre-requisites
@@ -52,33 +62,56 @@ root@iidr-virtual-machine:~# apt install binutils
 
 # Unpack and install DB2
 root@iidr-virtual-machine:~# cd /home/iidr/Downloads/
+
 root@iidr-virtual-machine:/home/iidr/Downloads# ls
+
 v11.5.7_linuxx64_universal_fixpack.tar.gz
+
 root@iidr-virtual-machine:/home/iidr/Downloads# tar -xvzf v11.5.7_linuxx64_universal_fixpack.tar.gz
+
 root@iidr-virtual-machine:/home/iidr/Downloads# ls
+
 universal 
+
 v11.5.7_linuxx64_universal_fixpack.tar.gz
+
 root@iidr-virtual-machine:/home/iidr/Downloads# cd universal/
+
 root@iidr-virtual-machine:/home/iidr/Downloads/universal# ./db2_install
+
 accept license agreement
+
 point to folder
+
 type SERVER when asked what to install
+
 pureScale - answer no
+
 wait till "The execution completed successfully"
 
 # Use information from this link to post-configure DB2
 https://github.com/zinal/Db2-Russian/blob/master/docs/Db2ManualInstance.md
 
 root@iidr-virtual-machine:/home/iidr/Downloads/universal# groupadd db2iadm1
+
 root@iidr-virtual-machine:/home/iidr/Downloads/universal# useradd -g db2iadm1 db2inst1
+
 root@iidr-virtual-machine:/home/iidr/Downloads/universal# useradd -g db2iadm1 db2fenc1
+
 root@iidr-virtual-machine:/home/iidr/Downloads/universal# 
+
 root@iidr-virtual-machine:/home/iidr/Downloads/universal# mkdir /home/db2inst1
+
 root@iidr-virtual-machine:/home/iidr/Downloads/universal# chown db2inst1:db2iadm1 /home/db2inst1
+
 root@iidr-virtual-machine:/home/iidr/Downloads/universal# mkdir /home/db2fenc1
+
 root@iidr-virtual-machine:/home/iidr/Downloads/universal# chown db2fenc1:db2iadm1 /home/db2fenc1
+
 root@iidr-virtual-machine:/home/iidr/Downloads/universal# cd /etc/security/limits.d/
+
 root@iidr-virtual-machine:/etc/security/limits.d# vi 30-db2.conf
+
 paste to file 
 ```
 @db2iadm1           soft    nproc           8192
@@ -89,6 +122,7 @@ paste to file
 @db2iadm1           hard    stack           16384
 ```
 save, exit
+
 root@iidr-virtual-machine:/etc/security/limits.d# cat 30-db2.conf 
 ```
 @db2iadm1           soft    nproc           8192
@@ -100,12 +134,15 @@ root@iidr-virtual-machine:/etc/security/limits.d# cat 30-db2.conf
 ```
 
 root@iidr-virtual-machine:/etc/security/limits.d# cd /opt/ibm/db2/V11.5/
+
 root@iidr-virtual-machine:/opt/ibm/db2/V11.5# ./instance/db2icrt -p 25000 -u db2fenc1 db2inst1
+
 DBI1070I  Program db2icrt completed successfully.
 
 Change default mode for user db2inst1 to bash
 
 root@iidr-virtual-machine:/opt/ibm/db2/V11.5# usermod --shell /bin/bash db2inst1
+
 root@iidr-virtual-machine:/opt/ibm/db2/V11.5# su - db2inst1
 
 Manually start DB2
@@ -126,7 +163,9 @@ LISTEN              0                   5                                       
 
 ## Create database with name Source and Schema mydata
 db2inst1@iidr-virtual-machine:~$ db2 create database Source pagesize 32 k
+
 DB20000I  The CREATE DATABASE command completed successfully.
+
 db2inst1@iidr-virtual-machine:~$ db2 connect to source
 
    Database Connection Information
@@ -136,21 +175,33 @@ db2inst1@iidr-virtual-machine:~$ db2 connect to source
  Local database alias   = SOURCE
 
 db2inst1@iidr-virtual-machine:~$ db2 create schema mydata
+
 DB20000I  The SQL command completed successfully.
 
 ## Turn on Archive logs for DB2
 
 db2inst1@iidr-virtual-machine:~$ pwd
+
 /home/db2inst1
+
 db2inst1@iidr-virtual-machine:~$ mkdir archlog
+
 db2inst1@iidr-virtual-machine:~$ cd archlog/
+
 db2inst1@iidr-virtual-machine:~/archlog$ db2 terminate
+
 DB20000I  The TERMINATE command completed successfully.
+
 db2inst1@iidr-virtual-machine:~/archlog$ db2 update db cfg for source using logarchmeth1 'disk:/home/db2inst1/archlog'
+
 DB20000I  The UPDATE DATABASE CONFIGURATION command completed successfully.
+
 db2inst1@iidr-virtual-machine:~/archlog$ db2 update db cfg for source using logarchcompr1 on
+
 DB20000I  The UPDATE DATABASE CONFIGURATION command completed successfully.
+
 db2inst1@iidr-virtual-machine:~/archlog$ db2 backup db source
+
 Backup successful. The timestamp for this backup image is : 20220323170618
 
 ## Configure DB2 for autostart
