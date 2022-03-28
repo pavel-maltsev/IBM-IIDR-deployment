@@ -47,9 +47,10 @@ root@iidr-virtual-machine:/home/iidr/Downloads# ls
 v11.5.7_linuxx64_universal_fixpack.tar.gz
 root@iidr-virtual-machine:/home/iidr/Downloads# tar -xvzf v11.5.7_linuxx64_universal_fixpack.tar.gz
 root@iidr-virtual-machine:/home/iidr/Downloads# ls
-universal  v11.5.7_linuxx64_universal_fixpack.tar.gz
+universal 
+v11.5.7_linuxx64_universal_fixpack.tar.gz
 root@iidr-virtual-machine:/home/iidr/Downloads# cd universal/
-root@iidr-virtual-machine:/home/iidr/Downloads/universal# ./db2_install 
+root@iidr-virtual-machine:/home/iidr/Downloads/universal# ./db2_install
 accept license agreement
 point to folder
 type SERVER when asked what to install
