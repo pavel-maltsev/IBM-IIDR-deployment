@@ -103,7 +103,7 @@ Find your new instance in the list with status RUNNING
 iidr@iidr-virtual-machine:~/iidr-access-srv/bin$ bash /opt/Distrib/iidraccess-11.4.0.4-11083-linux-x86-setup.bin 
 
 
-##Start Access Server
+## Start Access Server
 iidr@iidr-virtual-machine:~/iidr-access-srv/bin$ nohup ./dmaccessserver >../access.log 2>&1 &
 ```[1] 12581```
 
@@ -111,4 +111,4 @@ Create Admin User for Access Server/Management Console - requires access server 
 
 iidr@iidr-virtual-machine:~/iidr-access-srv/bin$ ./dmcreateuser admin "IIDR Admin" "x" inf0Server SYSADMIN TRUE FALSE FALSE
 
-Password here is not importand since you will be required to change that with first login to Management Console
+Password here is not important since you will be required to change that with first login to Management Console
