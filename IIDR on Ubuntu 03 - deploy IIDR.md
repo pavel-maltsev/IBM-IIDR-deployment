@@ -150,7 +150,7 @@ Maximum memory allowed for instance - `4096`
 
 Manage encryption profiles? Always answer - `YES` even if not needed
 
-### start creation of encryption profile 
+### Start creation of encryption profile 
 
 Add encryption profile
 
@@ -170,7 +170,7 @@ trust store type - Default (JKS Java)
 
 --end of creation of encryption profile
 
-### continue deployment of Agent
+### Continue deployment of Agent
 
 Use encryption profile which has just been created - select `1-profile2`
 
