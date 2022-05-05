@@ -23,7 +23,7 @@ Environment configuration is performed on VMWare workstation with parameters of 
 
 ## Update IIDR on Ubuntu 01 - deploy DB2.md
 
-Core steps to deploy DB2 such as:
+Core steps to deploy DB2, such as:
 
 1) OS user creation
 2) Find and download correct distributive from FixCentral
@@ -32,11 +32,13 @@ Core steps to deploy DB2 such as:
 5) Post-configrue DB2 with creation additional users
 6) Creation of the new schema
 7) Turn on Archive logs
-8) configure DB2 for autostart
+8) Configure DB2 for autostart
 
 ## IIDR on Ubuntu 02 - deploy Kafka.md
 
+Core steps to deploy Kafka, such as:
 
+1)
 
 
 IIDR on Ubuntu 03 - deploy IIDR.md
