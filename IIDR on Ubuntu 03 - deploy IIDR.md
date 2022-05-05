@@ -1,19 +1,19 @@
 # Deploy IIDR for DB2
 ## Pre-work
 
-Create a folder for refresh loader
+### Create a folder for refresh loader
 
 mkdir /home/db2inst1/refresh_loader
 
 chmod g+w refresh_loader
 
-Add iidr user to the db2iadm1 group
+### Add iidr user to the db2iadm1 group
 
 usermod -a -G db2iadm1 iidr
 
 RESTART THE SESSION TO RETRIEVE LATEST GROUP ASSIGNMENT FOR IIDR
 
-Create Schema for metadata 
+### Create Schema for metadata 
 
 iidr@iidr-virtual-machine:~/Desktop$ su - db2inst1
 
