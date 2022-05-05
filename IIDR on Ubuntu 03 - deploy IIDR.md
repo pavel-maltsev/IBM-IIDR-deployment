@@ -43,19 +43,19 @@ INSTALL
 
 Run Configuration Tool
 
-Name of new instance - DB2SOURCE  (will be visible in Management Console)
+Name of new instance - `DB2SOURCE`  (will be visible in Management Console)
 
-Port number  - may keep default - 10901
+Port number  - may keep default - `10901`
 
-Staging Storage Disk - for the test case 20GB is enough
+Staging Storage Disk - for the test case `20GB` is enough
 
-Maximum memory allowed for instance - keep default
+Maximum memory allowed for instance - keep `default`
 
-Manage encryption profiles? Always answer - YES even if not needed
+Manage encryption profiles? Always answer - `YES` even if not needed
 
 Add encryption profile
 
-Profile name = "none" (no quotes needed)
+Profile name = `none` (no quotes needed)
 
 Engine-to-engine encryption enabled - select 2-Disabled
 
