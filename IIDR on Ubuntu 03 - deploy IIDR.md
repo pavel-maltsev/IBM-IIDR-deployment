@@ -104,24 +104,124 @@ Find your new instance in the list with status RUNNING
 
 
 
+# Deploy IIDR for Kafka
+## Pre-work
+
+
+
+
+## Start IIDR for Kafka deployment
+
+### Execute Bash
+
+iidr@iidr-virtual-machine:~/iidr-access-srv/bin$ bash /opt/Distrib/setup-iidr-11.4.0.4-5625-linux-x86.bin 
+
+### Follow dialogs for deployment
+
+Locale - 2. English
+
+-> 1. Install new product
+
+Select DataStore type - 2- Kafka
+
+Offering - 1 or 4 for this setup
+
+Path where to install
+
+/home/iidr/agent-kafka
+
+Confirm Path
+
+Press 1 to agree with License Agreement terms
+
+Instance folder same as install path - will be created inside
+
+/home/iidr/agent-kafka
+
+INSTALL
+
+Run Configuration Tool
+
+Name of new instance - `KafkaTARGET`  (will be visible in Management Console)
+
+Port number  - may keep default - `11701`
+
+Maximum memory allowed for instance - `4096`
+
+Manage encryption profiles? Always answer - `YES` even if not needed
+
+### start creation of encryption profile 
+
+Add encryption profile
+
+Profile name = `profile2` (no quotes needed) or none as in previous case
+
+Engine-to-engine encryption enabled - select `2-Disabled`
+
+Path to keystore - empty
+
+path for trust store - default
+
+password to encrypt trust store - ENTER
+
+trust store type - Default (JKS Java)
+
+-> 4. Completed management of encryption profiles
+
+--end of creation of encryption profile
+
+### continue deployment of Agent
+
+Use encryption profile which has just been created - select `1-profile2`
+
+Select y to use JMS or TCP/IP or n to use TCP only communication connection: `n`
+
+Create password for user tsuser
+
+Enter password - `tsuser`
+
+confirm password
+
+Would you like to start instance: `Yes`
+
+-> 6. Exit
 
 # Deploy Access Server
+
+## Execute Bash
+
 iidr@iidr-virtual-machine:~/iidr-access-srv/bin$ bash /opt/Distrib/iidraccess-11.4.0.4-11083-linux-x86-setup.bin 
 
+## Follow dialogs for deployment
+
+English
+
+install folder = /home/iidr/access-srv
+
+Agree to License Agreement `1`
+
+LDAP configuration
+-> 1. none (Standard Mode)
+
+Default Port for access server: `10101`
+
+User Data Folder: `/home/iidr/access-srv` (same as install folder)
+
+INSTALL
 
 ## Start Access Server
 iidr@iidr-virtual-machine:~/iidr-access-srv/bin$ nohup ./dmaccessserver >../access.log 2>&1 &
 ```[1] 12581```
+
+It has to be started prior to creation of the user
+
+## Create user for Access Server
 
 Create Admin User for Access Server/Management Console - requires access server to be started
 
 iidr@iidr-virtual-machine:~/iidr-access-srv/bin$ ./dmcreateuser admin "IIDR Admin" "x" inf0Server SYSADMIN TRUE FALSE FALSE
 
 Password here is not important since you will be required to change that with first login to Management Console
-
-
-
-
 
 # After restart all components can be started with
 
