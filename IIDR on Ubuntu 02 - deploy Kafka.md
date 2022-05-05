@@ -1,6 +1,17 @@
 # Deploy Kafka server on Ubuntu
 
+## Link for instructions on confluent website
+
 https://docs.confluent.io/4.1.1/installation/installing_cp/deb-ubuntu.html
+
+## Pre-requisites
+
+root@iidr-virtual-machine:/usr/bin# sudo apt install default-jre
+
+root@iidr-virtual-machine:/usr/bin# sudo apt install default-jdk
+
+
+## Following instructions from the link to deploy Kafka
 
 iidr@iidr-virtual-machine:~/Desktop$ wget -qO - https://packages.confluent.io/deb/4.1/archive.key | sudo apt-key add -
 
@@ -13,6 +24,8 @@ iidr@iidr-virtual-machine:~/Desktop$ sudo add-apt-repository "deb [arch=amd64] h
 iidr@iidr-virtual-machine:~/Desktop$ sudo apt-get update && sudo apt-get install confluent-platform-oss-2.11
 
 Kafka has been deployed to /usr/bin
+
+## Zookeeper configuration
 
 switch to root user
 
@@ -69,10 +82,7 @@ root@iidr-virtual-machine:/etc/kafka# vi server.properties
 
 and other files are per link above
 
-root@iidr-virtual-machine:/usr/bin# sudo apt install default-jre
-
-root@iidr-virtual-machine:/usr/bin# sudo apt install default-jdk
-
+## Starting Zookeeper, Kafka, Schema-registry
 
 root@iidr-virtual-machine:/usr/bin# sudo systemctl start confluent-zookeeper
 
@@ -87,12 +97,18 @@ root@iidr-virtual-machine:/usr/bin# sudo systemctl start confluent-schema-regist
 root@iidr-virtual-machine:/usr/bin# sudo systemctl status confluent-schema-registry
 
 
+## List default created topics
+
 root@iidr-virtual-machine:/usr/bin# kafka-topics --zookeeper=localhost:2181 --list
 ```
 __confluent.support.metrics
 _confluent-metrics
 _schemas
 ```
+
+## Creation of the new topics 
+
+This step is not required for actual deployment of IIDR, but one may check if Kafka operates well
 
 root@iidr-virtual-machine:/usr/bin# kafka-topics --zookeeper iidr-virtual-machine:2181 --create --topic KafkaTopicTest --replication-factor 1 --partitions 1
 
