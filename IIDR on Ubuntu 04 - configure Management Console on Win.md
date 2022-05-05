@@ -105,5 +105,5 @@ window closed
 In the bottom left tab Datastores check status of connection by the icon. If the icon is not-connected, right click the DB2Source and select Connect
 
 
-
+File #3 0:11:23
 
