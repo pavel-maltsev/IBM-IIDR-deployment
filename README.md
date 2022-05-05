@@ -45,3 +45,7 @@ IIDR on Ubuntu 03 - deploy IIDR.md
 
 
 IIDR on Ubuntu - Running services list.md
+
+
+
+IIDR on Ubuntu 04 - configure Management Console on Win.md
