@@ -46,9 +46,11 @@ If not valid, check on Ubuntu
 
 Agent db2 should be started at this point, same as DB2 without which agent won't start
 
-`cd agent-db2/bin/
+```
+cd agent-db2/bin/
 nohup ./dmts64 -I DB2SOURCE >../agentdb2.log 2>&1 &
 cd ../../agent-kafka/bin/
-nohup ./dmts64 -I KafkaTARGET >../agentkafka.log 2>&1 &`
+nohup ./dmts64 -I KafkaTARGET >../agentkafka.log 2>&1 &
+```
 
 `db2start`
