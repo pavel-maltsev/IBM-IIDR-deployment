@@ -13,11 +13,6 @@ root@iidr-virtual-machine:/usr/bin# sudo systemctl enable confluent-schema-regis
 Validate the files in the /etc/systemd/system
 
 
-
-
-
-
-
 ## Use the folowing commands to check for the services running
 
 

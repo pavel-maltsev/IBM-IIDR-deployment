@@ -18,3 +18,28 @@ Client tier is deployed on Windows Server 2016 evaluation licence downloaded fro
 
 
 Environment configuration is performed on VMWare workstation with parameters of network setup for custom built net8 with NAT
+
+# File content
+
+## Update IIDR on Ubuntu 01 - deploy DB2.md
+
+Core steps to deploy DB2 such as:
+
+1) OS user creation
+2) Find and download correct distributive from FixCentral
+3) Manage pre-requisites for DB2 deployment
+4) Unpack and deploy DB2
+5) Post-configrue DB2 with creation additional users
+6) Creation of the new schema
+7) Turn on Archive logs
+8) configure DB2 for autostart
+
+## IIDR on Ubuntu 02 - deploy Kafka.md
+
+
+
+
+IIDR on Ubuntu 03 - deploy IIDR.md
+
+
+IIDR on Ubuntu - Running services list.md

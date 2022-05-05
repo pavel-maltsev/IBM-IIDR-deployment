@@ -57,7 +57,7 @@ Add encryption profile
 
 Profile name = `none` (no quotes needed)
 
-Engine-to-engine encryption enabled - select 2-Disabled
+Engine-to-engine encryption enabled - select `2-Disabled`
 
 Path to keystore - empty
 
@@ -67,29 +67,31 @@ password to encrypt trust store - ENTER
 
 trust store type - Default
 
-Use encryption profile which has just been created - select "1-none"
+Use encryption profile which has just been created - select `1-none`
 
-Select DB2 instance - db2inst1
+Select DB2 instance - `db2inst1`
 
-Select database name - 1.Source
+Select database name - `1.Source`
 
-configure advanced - no
+configure advanced - `no`
 
-Enter Username = db2inst1
+Enter Username = `db2inst1`
 
-Enter password - db2inst1
+Enter password - `db2inst1`
 
 select schema for metadata created in pre-work section
 
-1. CDCmetadata
+`1. CDCmetadata`
 
 Enter the refresh loader path created in pre-work section
 
-Do you want to start instance DB2SOURCE? = YES
+Do you want to start instance DB2SOURCE? = `YES`
+
+## Verify install of agent
 
 ./dmconfigurets
 
-List current instances
+`List current instances`
 
 Find your new instance in the list with status RUNNING
 
