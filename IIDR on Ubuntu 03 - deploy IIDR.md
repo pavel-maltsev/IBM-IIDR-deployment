@@ -23,7 +23,11 @@ db2inst1@iidr-virtual-machine:~$ db2 create schema CDCmetadata
 
 ## Start IIDR for DB2 deployment
 
+### Execute Bash
+
 iidr@iidr-virtual-machine:~/iidr-access-srv/bin$ bash /opt/Distrib/setup-iidr-11.4.0.4-5625-linux-x86.bin 
+
+### Follow dialogs for deployment
 
 Locale - English
 
