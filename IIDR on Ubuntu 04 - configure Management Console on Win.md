@@ -10,7 +10,7 @@ Make sure that all steps from previous documents are completed
 
 ## Launch Management Console
 
-### One time pre-work
+## One time pre-work
 
 User Name `admin`
 Password  - the one setup on previous file with Access server deployment `inf0Server`
@@ -81,7 +81,7 @@ Port (value from agent-kafka on Ubuntu): `11701`
 
 Check with PING button if valid.
 
-###
+### Assign users for Kafka target and DB2 source datastores
 
 At this point on the Access Manager tab 2 Datastores should be visible: DB2Source with type Dual and KafkaTarget with type Target
 
@@ -105,9 +105,9 @@ window closed
 In the bottom left tab Datastores check status of connection by the icon. 
 (Alternative is to use tab Configuration, tab Subscription and select icon Datastore connection)
 If the icon is not-connected, right click the DB2Source and select Connect
+_____
 
-
-# DB2 data preparation
+# DB2 data preparation (Ubuntu)
 
 Now the time to prepare database for the data replication test
 
@@ -126,29 +126,32 @@ insert into demo1 values (1, 'name1', 'surname1');
 select * from demo1; 
 should show that single row
 
-
-# Back in Management Console
-
+_____
+# Back in Management Console (Windows)
+## Creating basic subscription
 Configuration tab, Subscriptions tab, New Subscription icon click
 
-Name `Subscription1`
-Project `Default Project`
-Datastores Source `DB2Source`
-Datastores Target `KafkaTarget`
+- Name `Subscription1`
+- Project `Default Project`
+- Datastores Source `DB2Source`
+- Datastores Target `KafkaTarget`
 
 `OK` to close window
 
 Dialog:
 `Subscription has been created successfully. Do you want to mat tables for the subscription?`
-Answer `YES`
+
+Answer: `YES`
 
 Map tables - Select mapping type
 
-`Multiple Kafka Mannings`
+`Multiple Kafka Mappings`
+
 `Next`
 
 Select Source Tables
-Schema `DB2inst`, table `DEMO1`
+- Schema `DB2inst`
+- Table `DEMO1`
 
 `Next` -> `Finish`
 
@@ -178,23 +181,27 @@ The new column has been created but not yet included in replication. On the `Fil
 
 Same Filtering tab allows to exclude both the columns and rows from replication. Columns - by unselecting checkboxes and rows by creation of the `Row-filtering expression`.
 
-Now Save the changes by button below.
-
+Now Save the changes by clicking the SAVE button below.
+_____
 ## Changing Subscription parameters
 
 On the Configurations tab, Subscriptions tab, right click the SUBSCRIPTION1 subscription. 
+
 Select `User exits`
+
 User Exit Type should be default `Java Class`
 
 for the rest 2 lines the documentation has to be used to provide the exact correct string values:
 
 Google for `knowledge center infosphere data replication v11.4`
 
-Select IBM Documentation in results list
+Select `... - IBM Documentation` in results list
 
-On the knowledge center portal left navigation pane open secition `Change data capture(CDC) Replication` - `CDC Replication Engine for Kafka` - `Kafka custom operation processor (KCOP) for the CDC Replication Engine for Kafka` - `Enabling integrated Kafka custom operations processors (KCOP)`
+On the knowledge center portal left navigation pane open section `Change data capture(CDC) Replication` -> `CDC Replication Engine for Kafka` -> `Kafka custom operation processor (KCOP) for the CDC Replication Engine for Kafka` -> `Enabling integrated Kafka custom operations processors (KCOP)`
 
-Most common options are first and second in the documentation: "KcopDefaultBehaviourIntegrated" and "KcopMultiRowAvroLiveAuditIntegrated". For some other cases the "KcopSingleRowAvroAuditIntegrated" can also be used.
+Most common options: "KcopDefaultBehaviourIntegrated" and "KcopMultiRowAvroLiveAuditIntegrated". 
+
+For some other cases the "KcopSingleRowAvroAuditIntegrated" can also be used.
 
 We will use KcopDefaultBehaviourIntegrated. Click the link and copy long Class name into Management Console window field Class Name under Configuration section of User Exits
 ```
@@ -205,6 +212,7 @@ In the next row Parameter fill in: `-file:/home/iidr/kafka1.properties ` - as pa
 
 This file would have to be created on the next step.
 
+# Tuning configuration files of Kafka Agent on Ubuntu
 
 Switch to Ubuntu terminal consolde and create this parameter file with the content below.
 
@@ -251,6 +259,8 @@ result string:
 result string:
  `bootstrap.servers=localhost:9092`
  save, exit
+
+# Starting up subscription in Management Console
 
 Go back to Management console
 Configuration tab, right-click `SUBSCRIPTION1` and select `Kafka Properties`.
@@ -304,7 +314,7 @@ In the future the each of the new replicated tables will create a new topic for 
 
 In case of additional optimization, the configuration of the IIDR can be done the way that all data will be sent to the same topic, but in that case the solution which reads and parses the data should decide on it's own from which source the data is comming from and split the threads accordingly.
 
-The topic content can be read by 
+The topic content can be read by:
 ```
 ./kafka-console-consumer.sh --bootstrap-server localhost:9092 --from-beginning --topic kafkatarget.subscrip.sourcedb.db2inst1.demo1 --property schema.registry.url http://localhost:8081
 ```
