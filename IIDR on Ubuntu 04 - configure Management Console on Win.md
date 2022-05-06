@@ -224,7 +224,6 @@ But this line should be updated by exact Ubuntu VM values: (http instead of hhtp
 
 ```
 schema.registry.url=http://localhost:8081
-
 ```
 This one of the 3 most important configuration files for this agent. Other 2 are located by `/home/iidr/agent-kafka/instance/KafkaTARGET/conf` with names of `kafkaconsumer.properties` and `kafkaproducer.properties`
 
@@ -241,13 +240,77 @@ result string:
  `bootstrap.servers=localhost:9092`
  save, exit
 
- In the same file also the partitions for the kafka popics can be defined, same a other related to performance, buffers, packet size, etc. Those parameters are influencers to the reesources consumed by the agent itself. E.g. the high buffer size value may lead to the out-of-memory error in case of server RAM size is insufficient for that.
+ In the same file also the partitions for the kafka popics can be defined, same as other related to performance, buffers, packet size, etc. Those parameters are influencers to the reesources consumed by the agent itself. E.g. the high buffer size value may lead to the out-of-memory error in case of server RAM size is insufficient for that.
 
  From best practices perspective it's better to have no more that 20 subscriptions per IIDR agent.
 
  In the file Consumer the similar properties have to be setup but for the part where solution is reading the bookmark from the topic where bookmark is stored.
 
- so same line as in previous file has also be added to `kafkaconsumer.properties` file. In my case original file is completely empty.
+ So same line as in previous file has also be added to `kafkaconsumer.properties` file. In my case original file is completely empty.
+
 result string:
  `bootstrap.servers=localhost:9092`
  save, exit
+
+Go back to Management console
+Configuration tab, right-click `SUBSCRIPTION1` and select `Kafka Properties`.
+
+In the Zookeeper Server radio button active, in the Host Name field fill in some irrelevant data, e.g. `aaa` and same irrelevant port number `1234`
+All other fields can be left empty. 
+
+At this point of time the subscription can already be started
+
+in MC go to Monitoring tab, in the bottom section press `Collect Statistics` and on top right click the subscription `SUBSCRIPTION1` and do `Start mirroring` - `continious mirroring` with mandatory refresh offered by IIDR.
+
+In case of errors in the same bottow window part next to Collect Statistics there is an `Event` icon. By pressing that and selecting to `retrieve events` the latest log content can be viewed.
+
+The subscription should be in status Refreshing firstly and then be switched to Continious Mirroring.
+
+If that's the case - IIDR is operating correctly
+
+
+# Test IIDR replication
+in Ubuntu
+
+```
+su - db2inst1
+
+db2 -t
+
+insert into demo1 values (2. 'john', 'smith');
+```
+Switch back to MC and in Monitoring tab for the SUBSCRIPTION1 the window below should say that 2 records have been replicated (in several rows for the source operations and target operations)
+
+Replication of 2 rows has been performed. 1st row is the result of Refresh operation and 2nd row is the Continious Mirroring update which we've just introduced.
+
+Go back to Ubuntu
+
+under iidr user
+```
+cd /opt/Kafka/kafka_2.13-3.0.0/bin
+
+./kafka-topics.sh --bootstrap-server localhost:9092 --list
+```
+
+This lists the topics of Kafka created by IIDR
+
+- `KafkaTARGET-SUBSCRIP-commitstream` - here the bookmarks are stored
+
+- `_schemas` - here schemas are located - mandatory topic for schema-registry
+
+- `kafkatarget.subscrip.sourcedb.db2inst1.demo1` - the topic for data of exact table replication of the exact subscription
+
+In the future the each of the new replicated tables will create a new topic for data with similar name
+
+In case of additional optimization, the configuration of the IIDR can be done the way that all data will be sent to the same topic, but in that case the solution which reads and parses the data should decide on it's own from which source the data is comming from and split the threads accordingly.
+
+The topic content can be read by 
+```
+./kafka-console-consumer.sh --bootstrap-server localhost:9092 --from-beginning --topic kafkatarget.subscrip.sourcedb.db2inst1.demo1 --property schema.registry.url http://localhost:8081
+```
+Verify that the content of the topic has 2 valid lines in the output.
+The primary key which is in binary mode won't be visible in this case, but other 3 fields are pure readable strings.
+
+
+in order to view different output the kafka-avro-console-consumer.sh can be used if installed.
+
