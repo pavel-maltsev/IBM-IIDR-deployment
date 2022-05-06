@@ -17,7 +17,7 @@ Password  - the one setup on previous file with Access server deployment `inf0Se
 
 Server Name `192.168.171.131` in my case
 
-Here either server name if DNS is setup or IP address. IP address can be checked on Ubuntu VM with `ip addr`
+Here either server name if DNS is set up or IP address. IP address can be checked on Ubuntu VM with `ip addr`
 
 Port Number (also is taken from results for Access Server deployment) `10101`
 
