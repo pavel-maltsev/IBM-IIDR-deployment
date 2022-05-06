@@ -194,7 +194,60 @@ Select IBM Documentation in results list
 
 On the knowledge center portal left navigation pane open secition `Change data capture(CDC) Replication` - `CDC Replication Engine for Kafka` - `Kafka custom operation processor (KCOP) for the CDC Replication Engine for Kafka` - `Enabling integrated Kafka custom operations processors (KCOP)`
 
-Most common options are first and second in the documentation: "Write audit records in CSV format" or "Write JSON format records"
+Most common options are first and second in the documentation: "KcopDefaultBehaviourIntegrated" and "KcopMultiRowAvroLiveAuditIntegrated". For some other cases the "KcopSingleRowAvroAuditIntegrated" can also be used.
+
+We will use KcopDefaultBehaviourIntegrated. Click the link and copy long Class name into Management Console window field Class Name under Configuration section of User Exits
+```
+com.datamirror.ts.target.publication.userexit.sample.kafka.KcopDefaultBehaviorIntegrated
+```
+
+In the next row Parameter fill in: `-file:/home/iidr/kafka1.properties ` - as par instructions from the same link
+
+This file would have to be created on the next step.
 
 
-0:27:00
+Switch to Ubuntu terminal consolde and create this parameter file with the content below.
+
+In Ubuntu terminal window switch to user iidr
+
+`su - iidr`
+
+`sudo vi /home/iidr/kafka1.properties`
+
+In my case there is no authorisation required for schema registry, so I can use only first parameter from the list. But in most of the cases all 3 lines are required.
+
+```
+schema.registry.url=https://9.20.193.37:30888
+
+```
+But this line should be updated by exact Ubuntu VM values: (http instead of hhtps and correct IP and port values)
+
+```
+schema.registry.url=http://localhost:8081
+
+```
+This one of the 3 most important configuration files for this agent. Other 2 are located by `/home/iidr/agent-kafka/instance/KafkaTARGET/conf` with names of `kafkaconsumer.properties` and `kafkaproducer.properties`
+
+Search the knowledge center for the article `Specifying connection settings for a subscription applying to Kafka`.
+
+```
+sudo vi kafkaproducer.properties
+```
+add the following line at the end of the file
+`bootstrap.servers=host:port`
+The host and port can be taken from `/opt/Kafka/kafka_2.13-3.0.0/config/server/properties` file - listeners=INTERNALK... part. In my case `localhost:9092`
+
+result string:
+ `bootstrap.servers=localhost:9092`
+ save, exit
+
+ In the same file also the partitions for the kafka popics can be defined, same a other related to performance, buffers, packet size, etc. Those parameters are influencers to the reesources consumed by the agent itself. E.g. the high buffer size value may lead to the out-of-memory error in case of server RAM size is insufficient for that.
+
+ From best practices perspective it's better to have no more that 20 subscriptions per IIDR agent.
+
+ In the file Consumer the similar properties have to be setup but for the part where solution is reading the bookmark from the topic where bookmark is stored.
+
+ so same line as in previous file has also be added to `kafkaconsumer.properties` file. In my case original file is completely empty.
+result string:
+ `bootstrap.servers=localhost:9092`
+ save, exit
