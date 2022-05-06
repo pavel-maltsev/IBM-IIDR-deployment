@@ -102,8 +102,99 @@ DB Password 2 times : `db2inst1` ??
 `OK`
 window closed
 
-In the bottom left tab Datastores check status of connection by the icon. If the icon is not-connected, right click the DB2Source and select Connect
+In the bottom left tab Datastores check status of connection by the icon. 
+(Alternative is to use tab Configuration, tab Subscription and select icon Datastore connection)
+If the icon is not-connected, right click the DB2Source and select Connect
 
 
-File #3 0:11:23
+# DB2 data preparation
 
+Now the time to prepare database for the data replication test
+
+su - db2inst1
+
+db2 connect to SOURCE
+
+db2 -t
+
+this will allow to enter SQL commands with ; separator
+
+create table demo (Code integer not null primary key, FirstName varchar(50), LastName varchar(50));
+
+insert into demo1 values (1, 'name1', 'surname1');
+
+select * from demo1; 
+should show that single row
+
+
+# Back in Management Console
+
+Configuration tab, Subscriptions tab, New Subscription icon click
+
+Name `Subscription1`
+Project `Default Project`
+Datastores Source `DB2Source`
+Datastores Target `KafkaTarget`
+
+`OK` to close window
+
+Dialog:
+`Subscription has been created successfully. Do you want to mat tables for the subscription?`
+Answer `YES`
+
+Map tables - Select mapping type
+
+`Multiple Kafka Mannings`
+`Next`
+
+Select Source Tables
+Schema `DB2inst`, table `DEMO1`
+
+`Next` -> `Finish`
+
+On the right side of the screen click on the table name `DB2INST1.DEMO1`. This will open the right pane bottom section wiht mapping details.
+
+Derived columns - those are transformations on the source.
+
+Click `New Derived Column`, insert Name `FullName`, Data type `Varchar`, Length `100`
+
+Evaluation Frequency can be either for `After image only` or `Before and After Image`
+
+Derived column can either use:
+1) internal expression language for the rows mostly for data type conversion and basic transformations 
+2) call the java procedure in a form or .jar file on the Source Agent side
+
+Click the button to create basic expression for concatination of the First and Last Names.
+
+Expression should look like `%CONCAT(LASTNAME, ' ', FIRSTNAME)`
+
+Use `Verify` button to validate expression.
+
+After clicking `OK` the Mappings window will list a new column which has been just designed.
+
+IMPORTANT
+
+The new column has been created but not yet included in replication. On the `Filtering` tab next to `Column Mappings` tab the `Replicate` checkbox has to be now checked.
+
+Same Filtering tab allows to exclude both the columns and rows from replication. Columns - by unselecting checkboxes and rows by creation of the `Row-filtering expression`.
+
+Now Save the changes by button below.
+
+## Changing Subscription parameters
+
+On the Configurations tab, Subscriptions tab, right click the SUBSCRIPTION1 subscription. 
+Select `User exits`
+User Exit Type should be default `Java Class`
+
+for the rest 2 lines the documentation has to be used to provide the exact correct string values:
+
+Google for `knowledge center infosphere data replication v11.4`
+
+Select IBM Documentation in results list
+
+On the knowledge center portal left navigation pane open secition `Change data capture(CDC) Replication` - `CDC Replication Engine for Kafka` - `Kafka custom operation processor (KCOP) for the CDC Replication Engine for Kafka` - `Enabling integrated Kafka custom operations processors (KCOP)`
+
+Most common options are first and second in the documentation: "Write audit records in CSV format" or "Write JSON format records"
+
+
+0:27:00
