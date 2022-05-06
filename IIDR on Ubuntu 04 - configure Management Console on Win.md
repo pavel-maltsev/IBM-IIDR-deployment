@@ -11,27 +11,24 @@ Make sure that all steps from previous documents are completed
 ## Launch Management Console
 
 ## One time pre-work
+Login to Management Console UI
 
-User Name `admin`
-Password  - the one setup on previous file with Access server deployment `inf0Server`
+- User Name `admin`
+ - Password  - the one which has been setup on previous file with Access server deployment - `inf0Server`
+- Server Name `192.168.171.131` in my case.
+Here it should be either server name if DNS is set up, or IP address. IP address can be checked on Ubuntu VM with `ip addr`.
 
-Server Name `192.168.171.131` in my case
+- Port Number (also is taken from results of Access Server deployment) `10101`
 
-Here either server name if DNS is set up or IP address. IP address can be checked on Ubuntu VM with `ip addr`
+On first login the console will require to change password for admin user of Access Server.
 
-Port Number (also is taken from results for Access Server deployment) `10101`
-
-At the first login console will require to change password for admin user of Access Server
-
-Enter new password `admin` - that is incorrect - requires 2 alphabetic and 2 non-alphabetic characters. 
-
-e.g. `adminx01`
+Enter new password for `admin` - it requires at least 8 total, 2 alphabetic and 2 non-alphabetic characters, e.g. `adminx01`
 
 ## Configure Access Manager
 
-Switch to Access Manager tab
+Switch to Access Manager tab.
 
-At the bottom the User Management section displays this only user with details
+At the bottom the User Management section displays this only user with few details.
 
 ### Create DB2 Datastore
 
@@ -54,19 +51,19 @@ Agent db2 should be started at this point, same as DB2 without which agent won't
 su - db2inst1
 db2start
 ```
-
+then
 ```
-cd agent-db2/bin/
+cd /home/iidr/agent-db2/bin/
 nohup ./dmts64 -I DB2SOURCE >../agentdb2.log 2>&1 &
 cd ../../agent-kafka/bin/
 nohup ./dmts64 -I KafkaTARGET >../agentkafka.log 2>&1 &
 ```
-to check status the logs can be viewed:
+In order to check startup status the logs can be viewed:
 ```
 cd /home/iidr/agent-db2
 cat agentdb2.log
 ```
-Content should be `IBM Data Replication is running`
+Content should include: `IBM Data Replication is running`
 
 
 ### Create Kafka Datastore
@@ -86,8 +83,8 @@ Check with PING button if valid.
 At this point on the Access Manager tab 2 Datastores should be visible: DB2Source with type Dual and KafkaTarget with type Target
 
 In access Manager right click on KafkaTarget and select Assign User
-DBlogin ```tsuser```
-Password 2 times ```tsuser```
+- DBlogin `tsuser`
+- Password 2 times `tsuser`
 
 In access Manager right click on DB2Source and select Assign User
 
@@ -100,36 +97,38 @@ DB Login : `db2inst1`
 DB Password 2 times : `db2inst1` ?? 
 
 `OK`
-window closed
+
+Pop-up window is closed.
 
 In the bottom left tab Datastores check status of connection by the icon. 
-(Alternative is to use tab Configuration, tab Subscription and select icon Datastore connection)
-If the icon is not-connected, right click the DB2Source and select Connect
+(Alternative is to use tab Configuration, tab Subscription and select icon Datastore connection) 
+If the icon is not-connected, right click the DB2Source and select Connect.
 _____
 
 # DB2 data preparation (Ubuntu)
 
 Now the time to prepare database for the data replication test
-
+```
 su - db2inst1
 
 db2 connect to SOURCE
 
 db2 -t
-
+```
 this will allow to enter SQL commands with ; separator
-
+```
 create table demo (Code integer not null primary key, FirstName varchar(50), LastName varchar(50));
 
 insert into demo1 values (1, 'name1', 'surname1');
 
 select * from demo1; 
-should show that single row
+```
+This should show that single row.
 
 _____
 # Back in Management Console (Windows)
 ## Creating basic subscription
-Configuration tab, Subscriptions tab, New Subscription icon click
+Configuration tab -> Subscriptions tab -> New Subscription icon click
 
 - Name `Subscription1`
 - Project `Default Project`
@@ -139,7 +138,7 @@ Configuration tab, Subscriptions tab, New Subscription icon click
 `OK` to close window
 
 Dialog:
-`Subscription has been created successfully. Do you want to mat tables for the subscription?`
+`Subscription has been created successfully. Do you want to map tables for the subscription?`
 
 Answer: `YES`
 
@@ -159,7 +158,10 @@ On the right side of the screen click on the table name `DB2INST1.DEMO1`. This w
 
 Derived columns - those are transformations on the source.
 
-Click `New Derived Column`, insert Name `FullName`, Data type `Varchar`, Length `100`
+Click `New Derived Column`, insert 
+- Name `FullName`
+- Data type `Varchar`
+- Length `100`
 
 Evaluation Frequency can be either for `After image only` or `Before and After Image`
 
@@ -167,15 +169,15 @@ Derived column can either use:
 1) internal expression language for the rows mostly for data type conversion and basic transformations 
 2) call the java procedure in a form or .jar file on the Source Agent side
 
-Click the button to create basic expression for concatination of the First and Last Names.
+Click the button to create basic expression for concatenation of the First and Last Names.
 
-Expression should look like `%CONCAT(LASTNAME, ' ', FIRSTNAME)`
+Expression string should be `%CONCAT(LASTNAME, ' ', FIRSTNAME)`
 
 Use `Verify` button to validate expression.
 
 After clicking `OK` the Mappings window will list a new column which has been just designed.
 
-IMPORTANT
+IMPORTANT:
 
 The new column has been created but not yet included in replication. On the `Filtering` tab next to `Column Mappings` tab the `Replicate` checkbox has to be now checked.
 
@@ -185,7 +187,7 @@ Now Save the changes by clicking the SAVE button below.
 _____
 ## Changing Subscription parameters
 
-On the Configurations tab, Subscriptions tab, right click the SUBSCRIPTION1 subscription. 
+On the Configurations tab -> Subscriptions tab -> right click the SUBSCRIPTION1 subscription. 
 
 Select `User exits`
 
@@ -195,7 +197,7 @@ for the rest 2 lines the documentation has to be used to provide the exact corre
 
 Google for `knowledge center infosphere data replication v11.4`
 
-Select `... - IBM Documentation` in results list
+Select `"... - IBM Documentation"` in results list
 
 On the knowledge center portal left navigation pane open section `Change data capture(CDC) Replication` -> `CDC Replication Engine for Kafka` -> `Kafka custom operation processor (KCOP) for the CDC Replication Engine for Kafka` -> `Enabling integrated Kafka custom operations processors (KCOP)`
 
@@ -203,12 +205,12 @@ Most common options: "KcopDefaultBehaviourIntegrated" and "KcopMultiRowAvroLiveA
 
 For some other cases the "KcopSingleRowAvroAuditIntegrated" can also be used.
 
-We will use KcopDefaultBehaviourIntegrated. Click the link and copy long Class name into Management Console window field Class Name under Configuration section of User Exits
+We will use `KcopDefaultBehaviourIntegrated`. Click the link and copy long Class name into Management Console window field Class Name under Configuration section of User Exits
 ```
 com.datamirror.ts.target.publication.userexit.sample.kafka.KcopDefaultBehaviorIntegrated
 ```
 
-In the next row Parameter fill in: `-file:/home/iidr/kafka1.properties ` - as par instructions from the same link
+In the next row Parameter fill in: `-file:/home/iidr/kafka1.properties ` - as per instructions from the same link.
 
 This file would have to be created on the next step.
 
@@ -248,39 +250,46 @@ result string:
  `bootstrap.servers=localhost:9092`
  save, exit
 
- In the same file also the partitions for the kafka popics can be defined, same as other related to performance, buffers, packet size, etc. Those parameters are influencers to the reesources consumed by the agent itself. E.g. the high buffer size value may lead to the out-of-memory error in case of server RAM size is insufficient for that.
+ In the same file also the partitions for the kafka topics can be defined, same as other related to performance, buffers, packet size, etc. Those parameters are influencers to the reesources consumed by the agent itself. E.g. the high buffer size value may lead to the out-of-memory error in case of server RAM size is insufficient for that.
 
  From best practices perspective it's better to have no more that 20 subscriptions per IIDR agent.
 
- In the file Consumer the similar properties have to be setup but for the part where solution is reading the bookmark from the topic where bookmark is stored.
+ In the file Consumer the similar properties have to be setup, but for the part where solution is reading the bookmark from the topic where bookmark is stored.
 
  So same line as in previous file has also be added to `kafkaconsumer.properties` file. In my case original file is completely empty.
 
 result string:
  `bootstrap.servers=localhost:9092`
- save, exit
+ 
+ save
+ 
+ exit
 
 # Starting up subscription in Management Console
 
+## Small trick
 Go back to Management console
-Configuration tab, right-click `SUBSCRIPTION1` and select `Kafka Properties`.
 
-In the Zookeeper Server radio button active, in the Host Name field fill in some irrelevant data, e.g. `aaa` and same irrelevant port number `1234`
+Configuration tab -> right-click `SUBSCRIPTION1` -> select `Kafka Properties`.
+
+In the Zookeeper Server radio button = active, in the Host Name field fill in some irrelevant data, e.g. `aaa` and some irrelevant port number `1234`. Those just formally should not be emply in order not to invoke REST method instead.
+
 All other fields can be left empty. 
 
+## Starting subscription
 At this point of time the subscription can already be started
 
-in MC go to Monitoring tab, in the bottom section press `Collect Statistics` and on top right click the subscription `SUBSCRIPTION1` and do `Start mirroring` - `continious mirroring` with mandatory refresh offered by IIDR.
+In MC go to `Monitoring tab`, in the bottom section press `Collect Statistics` and on top right click the subscription `SUBSCRIPTION1` and do `Start mirroring` - `continious mirroring` with mandatory refresh offered by IIDR.
 
-In case of errors in the same bottow window part next to Collect Statistics there is an `Event` icon. By pressing that and selecting to `retrieve events` the latest log content can be viewed.
+In case of errors in the same bottom window part next to Collect Statistics there is an `Event` icon. By pressing that and selecting `Retrieve events`, the latest log content can be viewed.
 
-The subscription should be in status Refreshing firstly and then be switched to Continious Mirroring.
+The subscription in upper windows part should be in status `Refreshing` firstly and then be switched to `Continious Mirroring`.
 
 If that's the case - IIDR is operating correctly
 
 
 # Test IIDR replication
-in Ubuntu
+in Ubuntu:
 
 ```
 su - db2inst1
@@ -293,9 +302,7 @@ Switch back to MC and in Monitoring tab for the SUBSCRIPTION1 the window below s
 
 Replication of 2 rows has been performed. 1st row is the result of Refresh operation and 2nd row is the Continious Mirroring update which we've just introduced.
 
-Go back to Ubuntu
-
-under iidr user
+Go back to Ubuntu and under `iidr` user run the following:
 ```
 cd /opt/Kafka/kafka_2.13-3.0.0/bin
 
@@ -304,7 +311,7 @@ cd /opt/Kafka/kafka_2.13-3.0.0/bin
 
 This lists the topics of Kafka created by IIDR
 
-- `KafkaTARGET-SUBSCRIP-commitstream` - here the bookmarks are stored
+- `KafkaTARGET-SUBSCRIP-commitstream` - here the bookmarks are stored. The topic name is baased on the Datastore KafkaTARGET and trimmed SUBSCRPTION1 name.
 
 - `_schemas` - here schemas are located - mandatory topic for schema-registry
 
@@ -312,7 +319,7 @@ This lists the topics of Kafka created by IIDR
 
 In the future the each of the new replicated tables will create a new topic for data with similar name
 
-In case of additional optimization, the configuration of the IIDR can be done the way that all data will be sent to the same topic, but in that case the solution which reads and parses the data should decide on it's own from which source the data is comming from and split the threads accordingly.
+In case of additional optimization, the configuration of the IIDR can be done the way that all data will be sent to the same topic, but in that case the solution which reads and parses the data then should decide on it's own from which source the data row is comming from and split the target threads accordingly.
 
 The topic content can be read by:
 ```
@@ -321,6 +328,5 @@ The topic content can be read by:
 Verify that the content of the topic has 2 valid lines in the output.
 The primary key which is in binary mode won't be visible in this case, but other 3 fields are pure readable strings.
 
-
-in order to view different output the kafka-avro-console-consumer.sh can be used if installed.
+In order to view different output the kafka-avro-console-consumer.sh can be used if installed.
 
