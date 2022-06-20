@@ -240,3 +240,19 @@ iidr@ubuntu:~/agent-kafka/bin$ nohup ./dmts64 -I KafkaTARGET >../agentkafka.log 
 iidr@ubuntu:~$ cd access-srv/bin/
 
 iidr@ubuntu:~/access-srv/bin$ nohup ./dmaccessserver >../access.log 2>&1 &
+
+# To stop the agent components
+
+```
+cd agent-db2/bin/
+
+dmshutdown [-I <instance_name>]
+```
+Use this command to gracefully shut down CDC Replication.
+  
+```
+dmterminate [-L <locale>]
+```
+  
+Use this command to terminate all processes for all instances running on a or Linux® server.
+Use this command when you cannot completely shut down CDC Replication using the dmshutdown command.
